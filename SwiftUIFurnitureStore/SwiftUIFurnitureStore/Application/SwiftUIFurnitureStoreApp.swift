@@ -11,7 +11,7 @@ import SwiftUI
 struct SwiftUIFurnitureStoreApp: App {
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            StartPageView()
         }
     }
 }
