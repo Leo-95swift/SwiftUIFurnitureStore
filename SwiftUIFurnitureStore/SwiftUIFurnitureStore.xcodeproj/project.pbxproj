@@ -12,9 +12,8 @@
 		01C787FB2BE8E1250071172E /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 01C787FA2BE8E1250071172E /* Assets.xcassets */; };
 		01C787FE2BE8E1250071172E /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 01C787FD2BE8E1250071172E /* Preview Assets.xcassets */; };
 		01C7880C2BE8E9640071172E /* Colors.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 01C7880B2BE8E9640071172E /* Colors.xcassets */; };
-		01C7880E2BE8EBBA0071172E /* GradientView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01C7880D2BE8EBBA0071172E /* GradientView.swift */; };
-		01C788102BE8F7300071172E /* GradientText.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01C7880F2BE8F7300071172E /* GradientText.swift */; };
 		01C788162BE913930071172E /* StoreView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01C788152BE913930071172E /* StoreView.swift */; };
+		01C7881C2BEA0D9E0071172E /* SignInView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01C7881B2BEA0D9E0071172E /* SignInView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -24,9 +23,8 @@
 		01C787FA2BE8E1250071172E /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		01C787FD2BE8E1250071172E /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		01C7880B2BE8E9640071172E /* Colors.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Colors.xcassets; sourceTree = "<group>"; };
-		01C7880D2BE8EBBA0071172E /* GradientView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GradientView.swift; sourceTree = "<group>"; };
-		01C7880F2BE8F7300071172E /* GradientText.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GradientText.swift; sourceTree = "<group>"; };
 		01C788152BE913930071172E /* StoreView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoreView.swift; sourceTree = "<group>"; };
+		01C7881B2BEA0D9E0071172E /* SignInView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignInView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -96,6 +94,7 @@
 			isa = PBXGroup;
 			children = (
 				01C788072BE8E6210071172E /* StartPageModule */,
+				01C788172BEA0D770071172E /* SignInModule */,
 				01C788112BE913630071172E /* StoreModule */,
 			);
 			path = Modules;
@@ -122,8 +121,6 @@
 			isa = PBXGroup;
 			children = (
 				01C787F82BE8E1230071172E /* StartPageView.swift */,
-				01C7880D2BE8EBBA0071172E /* GradientView.swift */,
-				01C7880F2BE8F7300071172E /* GradientText.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -161,6 +158,38 @@
 			sourceTree = "<group>";
 		};
 		01C788142BE913810071172E /* Model */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
+		01C788172BEA0D770071172E /* SignInModule */ = {
+			isa = PBXGroup;
+			children = (
+				01C7881A2BEA0D900071172E /* Model */,
+				01C788192BEA0D8B0071172E /* View */,
+				01C788182BEA0D850071172E /* ViewModel */,
+			);
+			path = SignInModule;
+			sourceTree = "<group>";
+		};
+		01C788182BEA0D850071172E /* ViewModel */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = ViewModel;
+			sourceTree = "<group>";
+		};
+		01C788192BEA0D8B0071172E /* View */ = {
+			isa = PBXGroup;
+			children = (
+				01C7881B2BEA0D9E0071172E /* SignInView.swift */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		01C7881A2BEA0D900071172E /* Model */ = {
 			isa = PBXGroup;
 			children = (
 			);
@@ -238,11 +267,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				01C788102BE8F7300071172E /* GradientText.swift in Sources */,
+				01C7881C2BEA0D9E0071172E /* SignInView.swift in Sources */,
 				01C787F92BE8E1230071172E /* StartPageView.swift in Sources */,
 				01C787F72BE8E1230071172E /* SwiftUIFurnitureStoreApp.swift in Sources */,
 				01C788162BE913930071172E /* StoreView.swift in Sources */,
-				01C7880E2BE8EBBA0071172E /* GradientView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

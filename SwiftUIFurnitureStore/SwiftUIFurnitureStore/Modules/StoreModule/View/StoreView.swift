@@ -40,9 +40,13 @@ struct StoreView: View {
     
     var reviewView: some View {
         ZStack {
-            GradientView(
-                startColor: .gradientViewStart,
-                endColor: .gradientViewEnd
+            LinearGradient(
+                colors: [
+                    .gradientViewStart,
+                    .gradientViewEnd
+                ],
+                startPoint: .top,
+                endPoint: .bottom
             )
             .cornerRadius(14)
             .ignoresSafeArea()
@@ -89,11 +93,16 @@ struct StoreView: View {
         } label: {
             ZStack {
                 Color(.white)
-                GradientText(
-                    text: Constants.buyNowButton,
-                    startColor: .gradientTextStart,
-                    endColor: .gradientTextEnd
-                )
+                Text(Constants.buyNowButton)
+                    .foregroundStyle(
+                        .linearGradient(
+                            colors: [
+                                .gradientTextStart,
+                                .gradientTextEnd
+                            ],
+                            startPoint: .top,
+                            endPoint: .bottom
+                        ))
             }
         }
         .frame(width: 300, height: 55)

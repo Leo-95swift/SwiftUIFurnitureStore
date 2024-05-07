@@ -9,7 +9,7 @@ import SwiftUI
 
 /// Стартовый экран приложения
 struct StartPageView: View {
-    
+        
     // MARK: - Constants
 
     enum Constants {
@@ -23,20 +23,25 @@ struct StartPageView: View {
     // MARK: - Body
 
     var body: some View {
-        ZStack {
-            GradientView(
-                startColor: .gradientViewStart,
-                endColor: .gradientViewEnd
-            )
-            
-            VStack(spacing: 100) {
-                siteInfoView
-                getStartedButtonView
-                signInView
+        NavigationView {
+            ZStack {
+                LinearGradient(
+                    colors: [
+                        .gradientViewStart,
+                        .gradientViewEnd
+                    ],
+                    startPoint: .top,
+                    endPoint: .bottom
+                ).ignoresSafeArea()
+                
+                VStack(spacing: 100) {
+                    siteInfoView
+                    getStartedButtonView
+                    signInView
+                }
             }
         }
     }
-    
     
     // MARK: - Visual Elements
     
@@ -47,24 +52,36 @@ struct StartPageView: View {
                 .bold()
                 .foregroundColor(.white)
             
-            Text(Constants.signInButton)
-                .font(.system(size: 28))
-                .bold()
-                .foregroundColor(.white)
+            NavigationLink {
+                SignInView()
+            } label: {
+                Text(Constants.signInButton)
+                    .font(.system(size: 28))
+                    .bold()
+                    .foregroundColor(.white)
+            }
+            
         }
     }
     
     var getStartedButtonView: some View {
-        Button {
-            
+        NavigationLink {
+            StoreView()
         } label: {
             ZStack {
                 Color(.white)
-                GradientText(
-                    text: Constants.getStartedButton,
-                    startColor: .gradientTextStart,
-                    endColor: .gradientTextEnd
-                )
+                Text(Constants.getStartedButton)
+                    .foregroundStyle(
+                        .linearGradient(
+                            colors: [
+                                .gradientTextStart,
+                                .gradientTextEnd
+                            ],
+                            startPoint: .top,
+                            endPoint: .bottom
+                        ))
+                    .font(.system(size: 24))
+                    .bold()
             }
         }
         .frame(width: 300, height: 55)
@@ -82,6 +99,7 @@ struct StartPageView: View {
         }
         .padding()
     }
+    
 }
 
 #Preview {
