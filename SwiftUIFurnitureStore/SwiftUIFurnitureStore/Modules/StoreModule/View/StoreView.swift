@@ -7,139 +7,163 @@
 
 import SwiftUI
 
+/// Вью для экрана магазина
 struct StoreView: View {
     
     // MARK: - Constants
-    
-    enum Constants {
-        static let title = "Sofa Elda 900"
-        static let isFavoriteButton = "isFavorite"
-        static let sofaImage = "sofa"
-        static let buyNowButton = "Buy now"
-        static let articleLabel = "Article: 283564"
-        static let priceButtonText = "Price: 999$"
-        static let articleDescription = """
-                    Description: A sofa in a modern style is furniture without lush ornate decor. It has a simple or even futuristic appearance and sleek design.
-                """
+    private enum Constants {
+        static let heartImageName = "heart"
+        static let priceText = "Price:"
+        static let articleText = "Article: "
+        static let descriptionText = "Description: "
+        static let reviewText = "Review"
+        static let maximumValue = "/300"
+        static let buyNowText = "Buy now"
     }
-    
-    // MARK: - Body
     
     var body: some View {
         ZStack {
             Color.white
                 .ignoresSafeArea()
-            VStack {
-                furnitoreInfoView
-                reviewView
+            VStack() {
+                Spacer()
+                    .frame(height: (39))
+                furnitureNameView
+                Image(viewModel.furniture[0].imageName)
+                    .resizable()
+                    .frame(width: 300, height: 177)
+                furniturePriceView
+                furnitureDescriptionView
             }
+        }
+        .onTapGesture {
+            focused = false
+        }
+        .offset(y: CGFloat(offset))
+        .ignoresSafeArea(.keyboard)
+        .animation(.default)
+    }
+    
+    @ObservedObject private var viewModel = StoreViewModel()
+    @State private var offset = 0
+    @FocusState private var focused
+    @Environment(\.dismiss) private var dismiss
+    
+    
+    private var furnitureNameView: some View {
+        HStack {
+            Text(viewModel.furniture[0].name)
+                .boldTextConfiguration()
+            Spacer()
+            Button {
+            } label: {
+                Image(systemName: Constants.heartImageName)
+            }
+            .tint(.black)
+        }
+        .padding(.horizontal)
+    }
+    
+    private var furniturePriceView: some View {
+        HStack {
+            Spacer()
+            Text("\(Constants.priceText) \(viewModel.furniture[0].price)$")
+                .frame(width: 191, height: 54)
+                .boldTextConfiguration()
+                .background(Color.priceColorBackground)
+                .clipShape(UnevenRoundedRectangle(topLeadingRadius: 15, bottomLeadingRadius: 15))
         }
     }
     
-    // MARK: - Visual Elements
-    
-    var reviewView: some View {
-        ZStack {
-            LinearGradient(
+    private var furnitureDescriptionView: some View {
+        RoundedRectangle(cornerRadius: 15)
+            .fill(LinearGradient(
                 colors: [
                     .gradientViewStart,
                     .gradientViewEnd
                 ],
                 startPoint: .top,
-                endPoint: .bottom
+                endPoint: .bottom)
             )
-            .cornerRadius(14)
             .ignoresSafeArea()
-            VStack {
-                VStack(alignment: .leading) {
-                    VStack {
-                        otherInfoView
-                        Text("Review")
-                            .foregroundColor(.white)
-                            .font(.system(size: 16))
-                            .bold()
-                    }
-                    Text("Nothing yet")
-                        .foregroundColor(.white)
-                        .font(.system(size: 16))
-                        .bold()
-                    
+            .overlay {
+                VStack {
                     Spacer()
-                    
-                }.padding()
-                
-                buyNowButtonView
+                        .frame(height: 24)
+                    descriptionView
+                    Spacer()
+                    textEditorView
+                    Spacer()
+                        .frame(height: 32)
+                    buyButtonView
+                    Spacer()
+                }
+            }
+    }
+    
+    private var descriptionView: some View {
+        VStack(alignment: .leading) {
+            HStack {
+                Text(Constants.articleText)
+                    .font(.custom(AppConstants.verdanaBoldFontName, size: 16))
+                +
+                Text(String(viewModel.furniture[0].article))
+                    .font(.custom(AppConstants.verdanaFontName, size: 16))
+            }
+            Spacer()
+                .frame(height: 6)
+            HStack {
+                Text(Constants.descriptionText)
+                    .font(.custom(AppConstants.verdanaBoldFontName, size: 16))
+                +
+                Text("\(viewModel.furniture[0].description)")
+                    .font(.custom(AppConstants.verdanaFontName, size: 16))
             }
         }
+        .foregroundStyle(.white)
     }
     
-    var otherInfoView: some View {
-        VStack(alignment: .leading) {
-            Text(Constants.articleLabel)
-                .foregroundColor(.white)
-                .font(.system(size: 16))
-                .bold()
-            
-            Text(Constants.articleDescription).foregroundColor(.white)
-                .font(.system(size: 16))
-                .bold()
-            
-        }.padding()
-    }
-    
-    var buyNowButtonView: some View {
-        Button {
-            
-        } label: {
-            ZStack {
-                Color(.white)
-                Text(Constants.buyNowButton)
-                    .foregroundStyle(
-                        .linearGradient(
-                            colors: [
-                                .gradientTextStart,
-                                .gradientTextEnd
-                            ],
-                            startPoint: .top,
-                            endPoint: .bottom
-                        ))
+    private var textEditorView: some View {
+        VStack {
+            Text(Constants.reviewText)
+                .font(.custom(AppConstants.verdanaBoldFontName, size: 16))
+            HStack(alignment: .top) {
+                TextEditor(text: $viewModel.inputText)
+                    .frame(width: 300, height: 177)
+                    .scrollContentBackground(.hidden)
+                    .multilineTextAlignment(.leading)
+                    .focused($focused)
+                    .onChange(of: focused) { _, newValue in
+                        if newValue {
+                            offset = -300
+                        } else {
+                            offset = 0
+                        }
+                    }
+                VStack {
+                    Spacer()
+                        .frame(height: 10)
+                    Text("\(viewModel.totalCharNumber)\(Constants.maximumValue)")
+                        .font(.custom(AppConstants.verdanaMediumFontName, size: 14))
+                    Spacer()
+                }
             }
+        }
+        .foregroundStyle(.white)
+    }
+    
+    private var buyButtonView: some View {
+        Button {
+            dismiss()
+        } label: {
+            Text(Constants.buyNowText)
+                .buttonTextGradient()
         }
         .frame(width: 300, height: 55)
-        .cornerRadius(27)
+        .background(Color.white)
+        .clipShape(RoundedRectangle(cornerRadius: 25))
     }
-    
-    var furnitoreInfoView: some View {
-        VStack {
-            titleView
-            Image(Constants.sofaImage)
-            HStack() {
-                Spacer()
-                Text(Constants.priceButtonText)
-                    .frame(width: 190, height: 44)
-                    .background(Color.priceColorBackground)
-                    .cornerRadius(10)
-            }.padding()
-        }
-    }
-    
-    var titleView: some View {
-        HStack {
-            Text(Constants.title)
-                .font(.system(size: 20))
-                .bold()
-                .foregroundColor(.storeTitle)
-            Spacer()
-            Button {
-                print("didTapIsFavoriteButton")
-            } label: {
-                Image(Constants.isFavoriteButton)
-            }
-        }.padding()
-    }
-    
 }
-
 #Preview {
     StoreView()
 }

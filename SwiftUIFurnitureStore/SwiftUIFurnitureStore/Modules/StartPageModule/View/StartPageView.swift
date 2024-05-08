@@ -18,6 +18,7 @@ struct StartPageView: View {
         static let getStartedButton = "Get Started"
         static let hasAccountLabel = "Don't have an account?"
         static let signInButton = "Sign in here"
+        static let imageURL = "https://png.pngtree.com/png-vector/20230531/ourmid/pngtree-sketch-of-a-couch-with-buttons-on-it-vector-png-image_6776608.png"
     }
     
     // MARK: - Body
@@ -95,9 +96,22 @@ struct StartPageView: View {
                 .bold()
                 .foregroundColor(.white)
             
-            Image(Constants.logo)
+            asyncImageView
         }
         .padding()
+    }
+    
+    private var asyncImageView: some View {
+        AsyncImage(url: URL(string: Constants.imageURL)) { image in
+            image
+                .resizable()
+                .renderingMode(.template)
+                .frame(width: 300, height: 300)
+                .foregroundStyle(.white)
+        } placeholder: {
+            ProgressView()
+                .tint(.white)
+        }
     }
     
 }
