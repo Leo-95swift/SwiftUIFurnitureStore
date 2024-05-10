@@ -10,13 +10,10 @@ import SwiftUI
 struct ProductsView: View {
     
     private enum Constants {
-        
         static let priceLabel = "Your total price "
-        
     }
     
     @ObservedObject private var productsViewModel = ProductsViewModel()
-    
     @State private var search = ""
     @State private var isShowDetailView = false
     

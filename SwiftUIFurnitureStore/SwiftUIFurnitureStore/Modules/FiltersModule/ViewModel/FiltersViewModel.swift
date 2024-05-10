@@ -7,8 +7,8 @@
 
 import Foundation
 
-///  для бизнес логики экрана филтеров
-class FiltersViewModel: ObservableObject {
+/// для бизнес логики экрана фильтеров
+final class FiltersViewModel: ObservableObject {
     
     enum Constants {
         static let armchair = "armchairScroll"
@@ -17,9 +17,9 @@ class FiltersViewModel: ObservableObject {
     }
     
     @Published var categories: [Category] =  [
-        .init(image: Constants.armchair),
         .init(image: Constants.bed),
-        .init(image: Constants.sofa)
+        .init(image: Constants.sofa),
+        .init(image: Constants.armchair)
     ]
     
     @Published var colorCircles: [ColorCircle] =  [
@@ -32,7 +32,17 @@ class FiltersViewModel: ObservableObject {
         .init(colorName: "blue", color: .blue),
         .init(colorName: "green", color: .green),
         .init(colorName: "purple", color: .purple),
-        .init(colorName: "orange", color: .orange)
+        .init(colorName: "orange", color: .orange),
+        .init(colorName: "priceCol", color: .priceCol),
+        .init(colorName: "backCell", color: .backCell),
+        .init(colorName: "cyan", color: .cyan),
+        .init(colorName: "backSingupSwitch", color: .backSingupSwitch),
+        .init(colorName: "priceColGreen", color: .priceColGreen),
+        .init(colorName: "sliderCircle", color: .sliderCircle),
+        .init(colorName: "sliderNotSelected", color: .sliderNotSelected),
+        .init(colorName: "stepperBackground", color: .stepperBackground),
+        .init(colorName: "topGragient", color: .topGragient),
+        .init(colorName: "indigo", color: .indigo)
     ]
     
     @Published public var sliderValue: Double = 5000
@@ -52,26 +62,13 @@ class FiltersViewModel: ObservableObject {
             positionValue = -160
         case 1000:
             positionValue = -140
-        case 1500:
-            positionValue = -100
-        case 2000:
-            positionValue = -60
-        case 2500:
-            positionValue = -20
-        case 3000:
-            positionValue = 20
-        case 3500:
-            positionValue = 60
-        case 4000:
-            positionValue = 100
-        case 4500:
-            positionValue = 140
+        case (1500...4500):
+            positionValue = (sliderValue - 1000) / 500 * 40 - 140
         case 5000:
             positionValue = 160
         default:
-            positionValue = 160
+            positionValue = 180
         }
-        
     }
     
 }

@@ -9,6 +9,8 @@ import SwiftUI
 
 struct FiltersView: View {
     
+    // MARK: - Constants
+
     enum Constants {
         static let category = "Category"
         static let navigationTitle = "Filters"
@@ -21,30 +23,33 @@ struct FiltersView: View {
         
     }
     
-    @Environment(\.dismiss) private var dismiss
-    @ObservedObject private var filtersViewModel = FiltersViewModel()
-    
-    let rows: [GridItem] = [
+    private let rows: [GridItem] = [
         .init(.fixed(50))
     ]
     
-    let columns: [GridItem] = [
-        .init(.fixed(50)),
-        .init(.fixed(50)),
-        .init(.fixed(50)),
-        .init(.fixed(50)),
-        .init(.fixed(50))
+    private let columns: [GridItem] = [
+        .init(.fixed(70)),
+        .init(.fixed(70)),
+        .init(.fixed(70)),
+        .init(.fixed(70)),
+        .init(.fixed(70))
     ]
     
-    @State private var maxValue: CGFloat = 5000
-    @State private var minPriceColor: Color = .textGrey
-    
+    // MARK: - Body
+
     var body: some View {
         NavigationView {
             
             ZStack {
-                LinearGradient(colors: [.topGragient, .bottomGradient], startPoint: .leading, endPoint: .trailing)
-                    .ignoresSafeArea()
+                LinearGradient(
+                    colors: [
+                        .topGragient,
+                        .bottomGradient
+                    ],
+                    startPoint: .leading,
+                    endPoint: .trailing
+                ).ignoresSafeArea()
+                
                 VStack {
                     ZStack {
                         Color.white
@@ -53,55 +58,71 @@ struct FiltersView: View {
                             categoryView
                             pricesView
                             colorsView
+                            Spacer()
                         }
                     }
                 }
-            }.navigationBarTitleDisplayMode(.inline)
-                .navigationTitle(Constants.navigationTitle)
-                .toolbar {
-                    ToolbarItem(placement: .topBarLeading) {
-                        Button {
-                            dismiss()
-                        } label: {
-                            Image(systemName: Constants.backButtonIcon)
-                        }
-                        .tint(.white)
+            }
+            .navigationBarTitleDisplayMode(.inline)
+            .navigationTitle(Constants.navigationTitle)
+            .toolbar {
+                ToolbarItem(placement: .topBarLeading) {
+                    Button {
+                        dismiss()
+                    } label: {
+                        Image(systemName: Constants.backButtonIcon)
                     }
+                    .tint(.white)
                 }
+                
+            }
+        }
+        .navigationBarBackButtonHidden(true)
+        
+    }
+    
+    // MARK: - Private Properties
+    
+    @Environment(\.dismiss) private var dismiss
+    @ObservedObject private var filtersViewModel = FiltersViewModel()
+    @State private var maxValue: CGFloat = 5000
+    @State private var minPriceColor: Color = .textGrey
+    
+    // MARK: - Visual Elements
+    
+    private var categoryView: some View {
+        VStack() {
+            categoryHeaderView
+            categoryScrollView
         }
     }
     
-    // Category
-    
-    private var categoryView: some View {
-        VStack(alignment: .leading, spacing: 0) {
-            categoryHeaderView
-            categoryScrollView
-        }.padding()
-    }
-    
     private var categoryHeaderView: some View {
+        
         HStack {
             Text(Constants.category)
-                .frame(width: 175, height: 30)
+                .frame(width: 145, height: 30)
                 .font(.system(size: 24))
                 .bold()
                 .foregroundColor(.textGrey)
+            
             Spacer()
             HStack {
                 Text(Constants.more)
                     .font(.system(size: 24))
                     .bold()
-                    .foregroundColor(.lightGray)
+                    .foregroundColor(.gray)
                 
                 Button {
                     
                 } label: {
                     Image(systemName: Constants.detailButtonIcon)
-                        .foregroundColor(.lightGray)
+                        .foregroundColor(.gray)
                 }
             }
-        }.padding(30)
+        }.padding(.top ,20)
+            .padding(.trailing ,20)
+        
     }
     
     private var categoryScrollView: some View {
@@ -109,27 +130,27 @@ struct FiltersView: View {
             LazyHGrid(rows: rows)  {
                 ForEach(0..<filtersViewModel.categories.count) { index in
                     ZStack {
-                        Color.categoryBackground
+                        Color.backCell
                             .frame(width: 120, height: 80)
                             .cornerRadius(10)
                         Image(filtersViewModel.categories[index].image)
                             .resizable()
                             .frame(width: 50, height: 50)
                     }.shadow(
-                        radius: /*@START_MENU_TOKEN@*/10/*@END_MENU_TOKEN@*/, x: -2, y: 5
+                        radius: 2, x: -2, y: 5
                     )
                 }
             }
         }
+        .padding(.leading, 20)
         .scrollIndicators(.never)
     }
-    
-    // Prices
     
     private var pricesView: some View {
         ZStack {
             VStack(alignment: .leading) {
                 pricesHeaderView
+                    .padding(.leading, -50)
                 VStack(alignment: .leading, spacing: 0) {
                     pricesSliderView
                     pricesFooterView
@@ -187,10 +208,8 @@ struct FiltersView: View {
         
     }
     
-    // Colors
-    
     private var colorsView: some View {
-        VStack(alignment: .leading, spacing: 10) {
+        VStack(alignment: .leading, spacing: 20) {
             colorsHeaderView
             colorLazyVGrid
         }.padding()
@@ -207,10 +226,7 @@ struct FiltersView: View {
     private var colorLazyVGrid: some View {
         LazyVGrid(columns: columns) {
             ForEach(0..<filtersViewModel.colorCircles.count) { index in
-                
-                makeColorCircleView(
-                    colorCircle: filtersViewModel
-                        .colorCircles[index]
+                makeColorCircleView(colorCircle: filtersViewModel.colorCircles[index]
                 )
             }
         }
@@ -218,21 +234,20 @@ struct FiltersView: View {
     
     // MARK: - Private Methods
     
-    private func makeColorCircleView(
-        colorCircle: ColorCircle
-    ) -> some View {
+    private func makeColorCircleView(colorCircle: ColorCircle) -> some View {
         
         Button {
             filtersViewModel.updateSelectedColor(colorCircle.id)
         } label: {
             Color(colorCircle.color)
                 .frame(width: 40, height: 40)
-                .border(Color.sliderNotSelected, width: 1)
                 .cornerRadius(20)
+                .overlay(
+                    Circle()
+                        .stroke(.gray, lineWidth: 1))
         }
         
     }
-    
     
     private func updatePricePositionAppearance(_ position: CGFloat) {
         minPriceColor = filtersViewModel.sliderValue > 1500
