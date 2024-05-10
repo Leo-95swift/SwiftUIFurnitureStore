@@ -7,8 +7,8 @@
 
 import Foundation
 
-/// Настройка
-struct ProductCard: Hashable {
+/// Описание мебельи
+struct ProductCard: Hashable, Identifiable {
     /// Имя
     let name: String
     /// Иконка
@@ -17,8 +17,14 @@ struct ProductCard: Hashable {
     let price: String
     /// Новая цена
     var newPrice: Int
-    /// идентификатор для продукта
+    /// Артикуль товара
+    var articule: String
+    /// Описание товара
+    var description: String
+    /// Отзыви о товаре
+    var review: String
+    /// Идентификатор для продукта
     var id = UUID()
-    /// количество данного товара в корзине
+    /// Количество данного товара в корзине
     var count = 0
 }

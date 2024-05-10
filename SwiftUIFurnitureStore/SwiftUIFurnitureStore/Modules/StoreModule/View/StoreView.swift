@@ -29,12 +29,15 @@ struct StoreView: View {
                 Spacer()
                     .frame(height: (39))
                 furnitureNameView
-                Image(viewModel.furniture[0].imageName)
+                Image(productCard.iconName)
                     .resizable()
                     .frame(width: 300, height: 177)
                 furniturePriceView
                 furnitureDescriptionView
             }
+        }
+        .onAppear() {
+            viewModel.inputText = productCard.review
         }
         .onTapGesture {
             focused = false
@@ -44,15 +47,17 @@ struct StoreView: View {
         .animation(.default)
     }
     
+    var productCard: ProductCard
+    
     @ObservedObject private var viewModel = StoreViewModel()
     @State private var offset = 0
     @FocusState private var focused
+    @EnvironmentObject private var productViewModel: ProductsViewModel
     @Environment(\.dismiss) private var dismiss
-    
     
     private var furnitureNameView: some View {
         HStack {
-            Text(viewModel.furniture[0].name)
+            Text(productCard.name)
                 .boldTextConfiguration()
             Spacer()
             Button {
@@ -67,7 +72,7 @@ struct StoreView: View {
     private var furniturePriceView: some View {
         HStack {
             Spacer()
-            Text("\(Constants.priceText) \(viewModel.furniture[0].price)$")
+            Text("\(Constants.priceText) \(productCard.newPrice)$")
                 .frame(width: 191, height: 54)
                 .boldTextConfiguration()
                 .background(Color.priceColorBackground)
@@ -107,7 +112,7 @@ struct StoreView: View {
                 Text(Constants.articleText)
                     .font(.custom(AppConstants.verdanaBoldFontName, size: 16))
                 +
-                Text(String(viewModel.furniture[0].article))
+                Text(String(productCard.articule))
                     .font(.custom(AppConstants.verdanaFontName, size: 16))
             }
             Spacer()
@@ -116,7 +121,7 @@ struct StoreView: View {
                 Text(Constants.descriptionText)
                     .font(.custom(AppConstants.verdanaBoldFontName, size: 16))
                 +
-                Text("\(viewModel.furniture[0].description)")
+                Text("\(productCard.description)")
                     .font(.custom(AppConstants.verdanaFontName, size: 16))
             }
         }
@@ -164,6 +169,4 @@ struct StoreView: View {
         .clipShape(RoundedRectangle(cornerRadius: 25))
     }
 }
-#Preview {
-    StoreView()
-}
+

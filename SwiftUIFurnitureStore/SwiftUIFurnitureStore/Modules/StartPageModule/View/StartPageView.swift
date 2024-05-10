@@ -67,7 +67,7 @@ struct StartPageView: View {
     
     var getStartedButtonView: some View {
         NavigationLink {
-            StoreView()
+           
         } label: {
             ZStack {
                 Color(.white)

@@ -10,16 +10,76 @@ import Foundation
 class ProductsViewModel: ObservableObject {
     
     @Published var totalPrice = 0
-    
     @Published var allProducts: [ProductCard] = [
-        ProductCard(name: "Sofa", iconName: "sofa", price: "2000$", newPrice: 1500),
-        ProductCard(name: "Armchair", iconName: "armchair", price: "200$", newPrice: 150),
-        ProductCard(name: "Bed", iconName: "bed", price: "1000$", newPrice: 500),
-        ProductCard(name: "Table", iconName: "table", price: "260$", newPrice: 130),
-        ProductCard(name: "Сhair", iconName: "chair", price: "150$", newPrice: 50),
-        ProductCard(name: "Wardrobe", iconName: "wardrobe", price: "1200$", newPrice: 600)
+        ProductCard(
+            name: ProductsConstants.name1,
+            iconName: ProductsConstants.iconName1,
+            price: ProductsConstants.price1,
+            newPrice: 1500,
+            articule: ProductsConstants.articule1,
+            description: ProductsConstants.description1,
+            review: ProductsConstants.review1
+        ),
+        
+        ProductCard(
+            name: ProductsConstants.name2,
+            iconName: ProductsConstants.iconName2,
+            price: ProductsConstants.price2,
+            newPrice: 150,
+            articule: ProductsConstants.articule2,
+            description: ProductsConstants.description2,
+            review: ProductsConstants.review2
+        ),
+        
+        ProductCard(
+            name: ProductsConstants.name3,
+            iconName: ProductsConstants.iconName3,
+            price: ProductsConstants.price3,
+            newPrice: 500,
+            articule: ProductsConstants.articule3,
+            description: ProductsConstants.description3,
+            review: ProductsConstants.review3
+        ),
+        
+        ProductCard(
+            name: ProductsConstants.name4,
+            iconName: ProductsConstants.iconName4,
+            price: ProductsConstants.price4,
+            newPrice: 130,
+            articule: ProductsConstants.articule4,
+            description: ProductsConstants.description4,
+            review: ProductsConstants.review4
+        ),
+        
+        ProductCard(
+            name: ProductsConstants.name5,
+            iconName: ProductsConstants.iconName5,
+            price: ProductsConstants.price5,
+            newPrice: 50,
+            articule: ProductsConstants.articule5,
+            description: ProductsConstants.description5,
+            review: ProductsConstants.review5
+        ),
+        
+        ProductCard(
+            name: ProductsConstants.name6,
+            iconName: ProductsConstants.iconName6,
+            price: ProductsConstants.price6,
+            newPrice: 600,
+            articule: ProductsConstants.articule6,
+            description: ProductsConstants.description6,
+            review: ProductsConstants.review6
+        )
     ]
     
+    func getProduct(with id: UUID) -> ProductCard? {
+        if let index = allProducts.firstIndex(where: { $0.id == id }) {
+            return allProducts[index]
+        } else {
+            return nil
+        }
+    }
+
     func updateTotalPrice(id: UUID, change: PriceChange) {
         if let index = allProducts.firstIndex(where: { $0.id == id }) {
             switch change {

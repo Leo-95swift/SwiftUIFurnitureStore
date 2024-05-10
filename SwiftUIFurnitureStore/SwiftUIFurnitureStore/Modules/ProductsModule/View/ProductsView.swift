@@ -15,7 +15,9 @@ struct ProductsView: View {
     
     @ObservedObject private var productsViewModel = ProductsViewModel()
     @State private var search = ""
-    @State private var isShowDetailView = false
+    @State private var isShowStoreView = false
+    
+    @State private var selectedProduct: ProductCard?
     
     var body: some View {
         NavigationStack {
@@ -41,8 +43,10 @@ struct ProductsView: View {
                         }
                 }
             }
+            .environmentObject(productsViewModel)
         }
     }
+    
     private var searchField: some View {
         HStack() {
             HStack() {
@@ -86,7 +90,7 @@ struct ProductsView: View {
         
         ScrollView(showsIndicators: false) {
             VStack {
-                ForEach(productsViewModel.allProducts, id: \.name) { product in
+                ForEach(productsViewModel.allProducts, id: \.id) { product in
                     ZStack {
                         RoundedRectangle(cornerRadius: 20)
                             .fill(.backCell)
@@ -98,7 +102,7 @@ struct ProductsView: View {
                     }
                 }
             }
-            }
+        }
         
     }
     
@@ -106,16 +110,16 @@ struct ProductsView: View {
         
         HStack() {
             Button(action: {
-                isShowDetailView.toggle()
+                selectedProduct = product
             }, label: {
-            Image(product.iconName)
-                .resizable()
-                .frame(width: 140, height: 140)
-            Spacer().frame(width: 50)
+                Image(product.iconName)
+                    .resizable()
+                    .frame(width: 140, height: 140)
+                Spacer().frame(width: 50)
             })
-            .fullScreenCover(isPresented: $isShowDetailView, content: {
-                StoreView()
-            })
+            .fullScreenCover(item: $selectedProduct) { product in
+                StoreView(productCard: product)
+            }
             VStack {
                 Text(product.name)
                     .font(.system(size: 20, weight: .heavy))
@@ -131,7 +135,7 @@ struct ProductsView: View {
                 stepperView(for: product)
             }
         }
-            .foregroundStyle(.textGrey)
+        .foregroundStyle(.textGrey)
         
     }
     

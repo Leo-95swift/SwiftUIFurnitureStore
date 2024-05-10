@@ -192,7 +192,7 @@ struct SignInView: View {
         .cornerRadius(25)
         .shadow(color: .gray, radius: 3, y: 4)
         .fullScreenCover(isPresented: $shouldShowDetailView, content: {
-            StoreView()
+           // StoreView()
         })
     }
     
