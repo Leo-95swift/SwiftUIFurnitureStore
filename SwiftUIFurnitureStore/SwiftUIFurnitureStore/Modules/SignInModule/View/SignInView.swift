@@ -25,15 +25,19 @@ struct SignInView: View {
         static let alertMessage = "Обратитесь в тех.поддержку по номеру\n8-800-555-35-35"
         static let alertOk = "Ок"
         static let checkVerificationText = "Check Verification"
+        
     }
     
     // MARK: - @State Properties
     
+    @State private var errorOpacity: CGFloat = 0.0
     @State private var loginText = ""
     @State private var passwordText = ""
     @State private var isSecureModeOn = false
     @State private var shouldShowAlert = false
     @State private var shouldShowDetailView = false
+    @State private var shouldAnimate = false
+
     @FocusState private var loginFocused
     @FocusState private var passwordFocused
     @ObservedObject private var viewModel = SignInViewModel()
@@ -57,6 +61,7 @@ struct SignInView: View {
                 loginFocused = false
                 passwordFocused = false
             }
+            errorView
         }
         .ignoresSafeArea(.keyboard)
         .navigationBarBackButtonHidden(true)
@@ -169,19 +174,26 @@ struct SignInView: View {
     private var textFieldsView: some View {
         VStack(alignment: .leading) {
             loginTextFieldView
+                .offset(x: shouldAnimate ? -10 : 0)
             Spacer()
                 .frame(height: 24)
             passwordTitleView
             Spacer()
                 .frame(height: 8)
             passwordTextFieldView
+                .offset(x: shouldAnimate ? -10 : 0)
         }
         .foregroundStyle(.regularText)
+        .onChange(of: shouldAnimate) { _, newValue in
+            if newValue {
+                shouldAnimate = false
+            }
+        }
     }
     
     private var signUpButtonView: some View {
         Button {
-            shouldShowDetailView.toggle()
+            checkCredentials()
         } label: {
             Text(Constants.signUpText)
                 .font(.custom(AppConstants.verdanaBoldFontName, size: 20))
@@ -191,9 +203,6 @@ struct SignInView: View {
         .buttonBackgroundGradient()
         .cornerRadius(25)
         .shadow(color: .gray, radius: 3, y: 4)
-        .fullScreenCover(isPresented: $shouldShowDetailView, content: {
-           // StoreView()
-        })
     }
     
     private var forgotPasswordView: some View {
@@ -214,6 +223,34 @@ struct SignInView: View {
         }
         .frame(height: 24)
         .boldTextConfiguration()
+    }
+    
+    private var errorView: some View {
+        VStack {
+            Image("error")
+                .resizable()
+                .frame(width: 50, height: 50)
+                .foregroundStyle(.red)
+        }
+        .opacity(errorOpacity)
+        .foregroundStyle(.black)
+        .animation(.linear(duration: 0.5))
+    }
+    
+    private func checkCredentials() {
+        let number = "+7 914 333 83 17"
+        let password = "1234"
+        if loginText != number || passwordText != password {
+            withAnimation(.spring.repeatCount(5).speed(15)) {
+                shouldAnimate.toggle()
+                errorOpacity = 1
+                DispatchQueue.main.asyncAfter(deadline: .now() + 1.2) {
+                    errorOpacity = 0
+                }
+            }
+        } else {
+            print("correct credentials, you may proceed")
+        }
     }
 }
 

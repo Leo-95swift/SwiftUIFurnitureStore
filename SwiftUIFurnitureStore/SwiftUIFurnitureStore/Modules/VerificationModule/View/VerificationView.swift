@@ -99,8 +99,13 @@ struct VerificationView: View {
     
     private var messageImageAndVerificatonCodeView: some View {
         VStack {
-            Image(Constants.messageImageName)
-                .frame(width: 200, height: 200)
+            ZStack {
+                Image(Constants.messageImageName)
+                    .frame(width: 200, height: 200)
+                if shouldShowAlert {
+                    alertView
+                }
+            }
             Text(Constants.verificationCodeText)
                 .font(.custom(AppConstants.verdanaMediumFontName, size: 20))
                 .foregroundStyle(.regularText)
@@ -185,6 +190,40 @@ struct VerificationView: View {
         .shadow(color: .gray, radius: 2, y: 4)
     }
     
+    private var alertView: some View {
+        VStack(alignment: .center) {
+            Text("Fill in from message")
+                .font(.custom("Verdana-bold", size: 15))
+            Spacer()
+                .frame(height: 10)
+            Text(viewModel.generatedCode)
+            Spacer()
+                .frame(height: 10)
+            HStack(alignment: .bottom) {
+                Button("Cancel") {
+                    withAnimation {
+                        shouldShowAlert.toggle()
+                    }
+                }
+                .font(.custom("Verdana", size: 16))
+                Spacer()
+                    .frame(width: 60)
+                Button("Оk") {
+                    withAnimation {
+                        viewModel.fillTextField(for: &firstNumber, secondNum: &secondNumber, thirdNum: &thirdNumber, lastNum: &lastNumber)
+                        shouldShowAlert.toggle()
+                    }
+                }
+                .font(.custom("Verdana-bold", size: 16))
+            }
+            
+        }
+        .transition(.zoomAsymInOut)
+        .zIndex(1)
+        .padding(20)
+        .background(RoundedRectangle(cornerRadius: 20).fill(.white))
+    }
+    
     private var sendSMSagainView: some View {
         VStack {
             Text(Constants.didntReceiveSMSText)
@@ -192,25 +231,15 @@ struct VerificationView: View {
             Spacer()
                 .frame(height: 7)
             Button {
-                shouldShowAlert.toggle()
-                viewModel.generateRandomCode()
+                withAnimation {
+                    shouldShowAlert.toggle()
+                    viewModel.generateRandomCode()
+                }
             } label: {
                 Text(Constants.sendsmsAgainText)
                     .font(.custom(AppConstants.verdanaBoldFontName, size: 20))
             }
             .frame(height: 24)
-            .alert(isPresented: $shouldShowAlert) {
-                Alert(
-                    title: Text(Constants.alertMessage),
-                    message: Text(viewModel.generatedCode),
-                    primaryButton: .default(
-                        Text(Constants.alertOkText),
-                        action: {
-                            viewModel.fillTextField(for: &firstNumber, secondNum: &secondNumber, thirdNum: &thirdNumber, lastNum: &lastNumber)
-                        }),
-                    secondaryButton: .cancel()
-                )
-            }
             Divider()
                 .frame(width: 160, height: 1.0)
                 .background(.signUpBackground)
