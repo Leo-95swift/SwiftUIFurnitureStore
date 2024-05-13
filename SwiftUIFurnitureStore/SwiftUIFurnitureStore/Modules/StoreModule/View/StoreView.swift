@@ -31,7 +31,18 @@ struct StoreView: View {
                 furnitureNameView
                 Image(productCard.iconName)
                     .resizable()
+                    .scaledToFit()
                     .frame(width: 300, height: 177)
+                    .scaleEffect(imageScale)
+                    .gesture(
+                        MagnificationGesture()
+                            .onChanged { value in
+                                imageScale = value
+                            }
+                            .onEnded { value in
+                                imageScale = 1.0 // Reset to original scale on gesture end, or keep it scaled as per your design choice
+                            }
+                    )
                 furniturePriceView
                 furnitureDescriptionView
             }
@@ -51,6 +62,7 @@ struct StoreView: View {
     
     @ObservedObject private var viewModel = StoreViewModel()
     @State private var offset = 0
+    @State private var imageScale: CGFloat = 1.0
     @FocusState private var focused
     @EnvironmentObject private var productViewModel: ProductsViewModel
     @Environment(\.dismiss) private var dismiss
